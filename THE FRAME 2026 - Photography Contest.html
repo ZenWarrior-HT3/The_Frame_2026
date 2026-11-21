@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>THE FRAME 2026 | International Photography Exhibition &amp; Contest</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts: Cinzel (Editorial Display) & Inter (Clean UI) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind Configuration for Custom Colors & Fonts -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            obsidian: '#080808',
+            charcoal: '#111111',
+            surface: '#161616',
+            gold: {
+              DEFAULT: '#D4AF37',
+              light: '#F3E5AB',
+              dark: '#997A15',
+            }
+          },
+          fontFamily: {
+            display: ['Cinzel', 'serif'],
+            sans: ['Inter', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Base Dark Cinematic Styling */
+    body {
+      background-color: #080808;
+      color: #FFFFFF;
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* Subtle Film Grain Overlay */
+    .film-grain {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 50;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    }
+
+    /* Metallic Gold Text Gradient */
+    .text-gold-gradient {
+      background: linear-gradient(135deg, #F3E5AB 0%, #D4AF37 50%, #AA8219 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Gold Border Glow on Hover */
+    .gold-card {
+      background: linear-gradient(180deg, rgba(22, 22, 22, 0.95) 0%, rgba(12, 12, 12, 0.98) 100%);
+      border: 1px solid rgba(212, 175, 55, 0.18);
+      transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .gold-card:hover {
+      border-color: rgba(212, 175, 55, 0.6);
+      box-shadow: 0 12px 40px -12px rgba(212, 175, 55, 0.22);
+      transform: translateY(-3px);
+    }
+
+    .gold-card.selected {
+      border-color: #D4AF37;
+      background: linear-gradient(180deg, rgba(212, 175, 55, 0.14) 0%, rgba(17, 17, 17, 0.98) 100%);
+      box-shadow: 0 0 28px rgba(212, 175, 55, 0.24);
+    }
+
+    /* Cinema Frame Aspect & Viewfinder Reticle */
+    .viewfinder-corner {
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      border-color: rgba(212, 175, 55, 0.65);
+      pointer-events: none;
+      transition: all 0.3s ease;
+    }
+    .group:hover .viewfinder-corner {
+      width: 20px;
+      height: 20px;
+      border-color: #F3E5AB;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #080808;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #2a2a2a;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #D4AF37;
+    }
+
+    /* Accordion Transition */
+    .accordion-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease-out, padding 0.35s ease;
+    }
+  </style>
+</head>
+<body class="antialiased selection:bg-gold selection:text-obsidian">
+
+  <!-- Subtle Cinematic Grain Texture -->
+  <div class="film-grain" aria-hidden="true"></div>
+
+  <!-- Toast Notification Banner (Replaces alert()) -->
+  <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-3 pointer-events-none max-w-sm w-full px-4 sm:px-0"></div>
+
+  <!-- Navigation Header -->
+  <header class="fixed top-0 left-0 right-0 z-40 bg-obsidian/85 backdrop-blur-md border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        <!-- Brand Logo -->
+        <a href="#hero" class="flex items-center gap-3 group">
+          <div class="w-10 h-10 rounded-lg border border-gold/60 flex items-center justify-center bg-charcoal group-hover:border-gold-light transition-colors">
+            <svg class="w-5 h-5 text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+              <circle cx="12" cy="13" r="4"/>
+            </svg>
+          </div>
+          <div>
+            <span class="font-display font-bold tracking-[0.2em] text-lg sm:text-xl text-white block leading-none">THE FRAME</span>
+            <span class="text-[10px] tracking-[0.35em] text-gold uppercase font-medium">2026 Edition</span>
+          </div>
+        </a>
+
+        <!-- Desktop Menu -->
+        <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-neutral-300">
+          <a href="#timeline" class="hover:text-gold transition-colors">Timeline</a>
+          <a href="#categories" class="hover:text-gold transition-colors">Categories &amp; Planner</a>
+          <a href="#rules" class="hover:text-gold transition-colors">Rules &amp; Voting</a>
+          <a href="#gallery" class="hover:text-gold transition-colors">Exhibition Gallery</a>
+          <a href="#faq" class="hover:text-gold transition-colors">FAQ</a>
+        </nav>
+
+        <!-- Primary CTA -->
+        <div class="hidden md:flex items-center gap-3">
+          <a href="#submit" class="px-5 py-2.5 rounded-lg bg-gradient-to-r from-gold to-gold-dark text-obsidian font-semibold text-sm tracking-wide hover:brightness-110 transition-all shadow-lg shadow-gold/20">
+            Submit Entry
+          </a>
+        </div>
+
+        <!-- Mobile Menu Toggle -->
+        <button id="mobile-menu-btn" type="button" aria-label="Toggle Menu" class="md:hidden p-2.5 rounded-lg border border-white/15 text-neutral-200 hover:text-gold hover:border-gold/50 transition-colors">
+          <svg id="menu-icon-open" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+          <svg id="menu-icon-close" class="w-6 h-6 hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation Drawer -->
+    <div id="mobile-menu" class="hidden md:hidden bg-charcoal border-b border-white/10 px-4 pt-3 pb-6 space-y-2">
+      <a href="#timeline" class="mobile-nav-link block px-4 py-3 rounded-lg text-neutral-200 hover:bg-white/5 hover:text-gold">Timeline</a>
+      <a href="#categories" class="mobile-nav-link block px-4 py-3 rounded-lg text-neutral-200 hover:bg-white/5 hover:text-gold">Categories &amp; Planner</a>
+      <a href="#rules" class="mobile-nav-link block px-4 py-3 rounded-lg text-neutral-200 hover:bg-white/5 hover:text-gold">Rules &amp; Voting</a>
+      <a href="#gallery" class="mobile-nav-link block px-4 py-3 rounded-lg text-neutral-200 hover:bg-white/5 hover:text-gold">Exhibition Gallery</a>
+      <a href="#faq" class="mobile-nav-link block px-4 py-3 rounded-lg text-neutral-200 hover:bg-white/5 hover:text-gold">FAQ</a>
+      <div class="pt-2">
+        <a href="#submit" class="mobile-nav-link block text-center w-full py-3 rounded-lg bg-gold text-obsidian font-semibold">Prepare Submission</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section id="hero" class="relative min-h-screen flex items-center justify-center pt-28 pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
+    <!-- Ambient Radial Spotlight -->
+    <div class="absolute inset-0 pointer-events-none" aria-hidden="true">
+      <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[720px] h-[420px] bg-gold/10 rounded-full blur-[130px]"></div>
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#080808_85%)]"></div>
+    </div>
+
+    <div class="relative z-10 max-w-5xl mx-auto text-center">
+      <!-- Top Eyebrow Badge -->
+      <div class="inline-flex flex-wrap items-center justify-center gap-2.5 px-4 py-1.5 rounded-full border border-gold/40 bg-charcoal/90 text-gold-light text-xs sm:text-sm tracking-[0.18em] uppercase mb-8">
+        <span class="w-2 h-2 rounded-full bg-gold animate-pulse"></span>
+        Open Worldwide &bull; Edited Photos Allowed (Tag as EDITED)
+      </div>
+
+      <!-- Main Title -->
+      <h1 class="font-display text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold tracking-[0.12em] uppercase leading-tight mb-6">
+        <span class="block text-white">THE FRAME</span>
+        <span class="block text-gold-gradient mt-1">2026</span>
+      </h1>
+
+      <!-- Subtitle -->
+      <p class="max-w-2xl mx-auto text-neutral-300 text-base sm:text-lg md:text-xl font-light leading-relaxed mb-10">
+        Six distinct visual worlds. Up to three chosen lenses per artist—original or post-processed (tagged <span class="text-gold-light font-mono text-sm sm:text-base">[EDITED]</span>). One singular photograph crowned <span class="text-gold-light font-medium">Best in Category</span>.
+      </p>
+
+      <!-- Dynamic Live Countdown Timer -->
+      <div class="max-w-2xl mx-auto mb-12">
+        <div class="rounded-2xl border border-gold/30 bg-charcoal/80 backdrop-blur-md p-5 sm:p-6 shadow-2xl">
+          <div class="flex items-center justify-center gap-2 text-xs sm:text-sm uppercase tracking-[0.22em] text-gold mb-4">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+            </svg>
+            <span id="countdown-label">Submissions Open In</span>
+          </div>
+
+          <div class="grid grid-cols-4 gap-2 sm:gap-4" id="countdown-grid">
+            <div class="rounded-xl bg-obsidian/90 border border-white/10 py-3 sm:py-4 px-2">
+              <div id="cd-days" class="font-display text-2xl sm:text-4xl md:text-5xl font-bold text-white">00</div>
+              <div class="text-[10px] sm:text-xs uppercase tracking-widest text-neutral-400 mt-1">Days</div>
+            </div>
+            <div class="rounded-xl bg-obsidian/90 border border-white/10 py-3 sm:py-4 px-2">
+              <div id="cd-hours" class="font-display text-2xl sm:text-4xl md:text-5xl font-bold text-white">00</div>
+              <div class="text-[10px] sm:text-xs uppercase tracking-widest text-neutral-400 mt-1">Hours</div>
+            </div>
+            <div class="rounded-xl bg-obsidian/90 border border-white/10 py-3 sm:py-4 px-2">
+              <div id="cd-minutes" class="font-display text-2xl sm:text-4xl md:text-5xl font-bold text-white">00</div>
+              <div class="text-[10px] sm:text-xs uppercase tracking-widest text-neutral-400 mt-1">Minutes</div>
+            </div>
+            <div class="rounded-xl bg-obsidian/90 border border-gold/40 py-3 sm:py-4 px-2">
+              <div id="cd-seconds" class="font-display text-2xl sm:text-4xl md:text-5xl font-bold text-gold">00</div>
+              <div class="text-[10px] sm:text-xs uppercase tracking-widest text-gold-light/80 mt-1">Seconds</div>
+            </div>
+          </div>
+
+          <p id="countdown-subtext" class="text-xs text-neutral-400 mt-4">
+            Window: <span class="text-white">23 Nov 2026</span> &mdash; <span class="text-white">24 Dec 2026</span> &bull; Results: <span class="text-gold-light">1 Jan 2027</span>
+          </p>
+        </div>
+      </div>
+
+      <!-- Hero Actions -->
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a href="#categories" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-gradient-to-r from-gold to-gold-dark text-obsidian font-bold text-sm uppercase tracking-widest hover:brightness-110 transition-all shadow-xl shadow-gold/20">
+          Select Your 3 Categories
+        </a>
+        <a href="#gallery" class="w-full sm:w-auto px-8 py-4 rounded-xl border border-white/20 bg-charcoal/60 text-white font-medium text-sm uppercase tracking-widest hover:border-gold hover:text-gold transition-all">
+          Explore Exhibition Frames
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Official Timeline Section -->
+  <section id="timeline" class="py-20 sm:py-24 px-4 sm:px-6 lg:px-8 border-t border-white/10 bg-charcoal/40">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <span class="text-gold text-xs uppercase tracking-[0.28em] font-semibold">Official Schedule</span>
+        <h2 class="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-white mt-2">Contest Timeline</h2>
+        <p class="text-neutral-400 text-sm sm:text-base mt-3">Mark these three key milestones for THE FRAME 2026 exhibition cycle.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 relative">
+        <!-- Milestone 1 -->
+        <div id="milestone-1" class="gold-card rounded-2xl p-7 relative">
+          <div class="flex items-center justify-between mb-5">
+            <span class="text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full bg-gold/15 text-gold border border-gold/30">Phase 01</span>
+            <span id="badge-m1" class="text-xs text-neutral-400 font-medium">Opening Date</span>
+          </div>
+          <div class="font-display text-2xl sm:text-3xl font-bold text-white mb-2">23 Nov 2026</div>
+          <h3 class="text-lg font-semibold text-gold-light mb-3">Submissions Open</h3>
+          <p class="text-sm text-neutral-400 leading-relaxed">
+            The frame opens worldwide. Anyone may choose up to 3 topics and send 1 photograph per chosen topic directly to our official handles.
+          </p>
+        </div>
+
+        <!-- Milestone 2 -->
+        <div id="milestone-2" class="gold-card rounded-2xl p-7 relative">
+          <div class="flex items-center justify-between mb-5">
+            <span class="text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full bg-gold/15 text-gold border border-gold/30">Phase 02</span>
+            <span id="badge-m2" class="text-xs text-neutral-400 font-medium">Final Call</span>
+          </div>
+          <div class="font-display text-2xl sm:text-3xl font-bold text-white mb-2">24 Dec 2026</div>
+          <h3 class="text-lg font-semibold text-gold-light mb-3">Submission Deadline</h3>
+          <p class="text-sm text-neutral-400 leading-relaxed">
+            Last day to send your photographs to <span class="text-white font-mono">zenwarrior_ht3</span> or <span class="text-white font-mono">epicmaster__</span> before offline judging begins.
+          </p>
+        </div>
+
+        <!-- Milestone 3 -->
+        <div id="milestone-3" class="gold-card rounded-2xl p-7 relative">
+          <div class="flex items-center justify-between mb-5">
+            <span class="text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full bg-gold/15 text-gold border border-gold/30">Phase 03</span>
+            <span id="badge-m3" class="text-xs text-neutral-400 font-medium">New Year Reveal</span>
+          </div>
+          <div class="font-display text-2xl sm:text-3xl font-bold text-white mb-2">1 Jan 2027</div>
+          <h3 class="text-lg font-semibold text-gold-light mb-3">Results Announced</h3>
+          <p class="text-sm text-neutral-400 leading-relaxed">
+            Following offline voting, 1 winning photograph per category (6 total) is officially crowned <span class="text-white">Best in Category</span>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Categories & Entry Planner Section -->
+  <section id="categories" class="py-20 sm:py-28 px-4 sm:px-6 lg:px-8 border-t border-white/10">
+    <div class="max-w-7xl mx-auto">
+      <div class="flex flex-col lg:flex-row lg:items-end justify-between mb-12 gap-6">
+        <div>
+          <span class="text-gold text-xs uppercase tracking-[0.28em] font-semibold">Interactive Entry Planner</span>
+          <h2 class="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-white mt-2">The 6 Contest Categories</h2>
+          <p class="text-neutral-400 text-sm sm:text-base mt-3 max-w-2xl">
+            Click up to <span class="text-gold-light font-semibold">3 topics</span> below to build your personal entry checklist. You may submit <span class="text-white font-medium">1 photograph per selected topic</span> (maximum 3 photos total).
+          </p>
+        </div>
+
+        <!-- Selection Counter Pill -->
+        <div class="inline-flex items-center gap-4 px-5 py-3.5 rounded-xl bg-charcoal border border-gold/40 self-start lg:self-auto">
+          <div>
+            <div class="text-xs uppercase tracking-wider text-neutral-400">Selected Topics</div>
+            <div class="text-xl font-display font-bold text-white">
+              <span id="selected-count" class="text-gold">0</span> / 3 <span class="text-xs font-sans font-normal text-neutral-400 ml-1">(<span id="photo-count">0</span> photos max)</span>
+            </div>
+          </div>
+          <button id="reset-selection-btn" type="button" class="text-xs px-3 py-1.5 rounded-lg border border-white/15 text-neutral-300 hover:border-gold hover:text-gold transition-colors">
+            Clear
+          </button>
+        </div>
+      </div>
+
+      <!-- 6 Categories Grid -->
+      <div id="categories-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Rendered dynamically via JS for interactive state -->
+      </div>
+
+      <!-- Interactive Submission Generator & Destination Box -->
+      <div id="submit" class="mt-14 rounded-2xl border border-gold/35 bg-charcoal/90 p-6 sm:p-8 lg:p-10 shadow-2xl">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          
+          <!-- Left Column: Checklist & Submission IDs -->
+          <div class="lg:col-span-6 space-y-6">
+            <div>
+              <span class="text-xs uppercase tracking-[0.25em] text-gold font-semibold">Direct Submission Portal</span>
+              <h3 class="font-display text-2xl sm:text-3xl font-bold text-white mt-1">How to Send Your Entries</h3>
+              <p class="text-sm text-neutral-300 mt-2 leading-relaxed">
+                Send your selected photographs directly to either of our official contest IDs between <strong class="text-white">23 Nov 2026</strong> and <strong class="text-white">24 Dec 2026</strong>.
+              </p>
+            </div>
+
+            <!-- Copyable Submission Handles -->
+            <div class="space-y-3">
+              <label class="block text-xs uppercase tracking-widest text-neutral-400">Official Submission IDs (Click to Copy)</label>
+              
+              <div class="flex items-center justify-between p-3.5 rounded-xl bg-obsidian border border-white/15 hover:border-gold/50 transition-colors">
+                <div class="flex items-center gap-3">
+                  <span class="w-8 h-8 rounded-lg bg-gold/15 border border-gold/30 flex items-center justify-center text-gold font-mono text-xs font-bold">@</span>
+                  <div>
+                    <div class="font-mono text-sm sm:text-base font-semibold text-white">zenwarrior_ht3</div>
+                    <div class="text-[11px] text-neutral-400">Primary Submission Handle</div>
+                  </div>
+                </div>
+                <button type="button" onclick="copyText('zenwarrior_ht3', 'Copied ID: zenwarrior_ht3')" class="px-3.5 py-2 rounded-lg bg-white/5 hover:bg-gold hover:text-obsidian text-xs font-semibold text-gold-light transition-all">
+                  Copy ID
+                </button>
+              </div>
+
+              <div class="flex items-center justify-between p-3.5 rounded-xl bg-obsidian border border-white/15 hover:border-gold/50 transition-colors">
+                <div class="flex items-center gap-3">
+                  <span class="w-8 h-8 rounded-lg bg-gold/15 border border-gold/30 flex items-center justify-center text-gold font-mono text-xs font-bold">@</span>
+                  <div>
+                    <div class="font-mono text-sm sm:text-base font-semibold text-white">epicmaster__</div>
+                    <div class="text-[11px] text-neutral-400">Secondary Submission Handle</div>
+                  </div>
+                </div>
+                <button type="button" onclick="copyText('epicmaster__', 'Copied ID: epicmaster__')" class="px-3.5 py-2 rounded-lg bg-white/5 hover:bg-gold hover:text-obsidian text-xs font-semibold text-gold-light transition-all">
+                  Copy ID
+                </button>
+              </div>
+            </div>
+
+            <!-- Dynamic Checklist of Chosen Topics -->
+            <div class="p-4 rounded-xl bg-obsidian/80 border border-white/10">
+              <div class="flex items-center justify-between gap-2 mb-2.5">
+                <span class="text-xs uppercase tracking-wider text-gold-light font-semibold">Your Entry Checklist &amp; Edit Tags</span>
+                <span class="text-[11px] text-neutral-400">Toggle Original / Edited</span>
+              </div>
+              <ul id="planner-checklist" class="space-y-2.5 text-sm text-neutral-300">
+                <li class="text-neutral-500 italic">Select up to 3 categories above to generate your photo checklist...</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Right Column: Ready-to-Copy Submission Note -->
+          <div class="lg:col-span-6 bg-obsidian rounded-xl border border-white/15 p-5 sm:p-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+              <div>
+                <h4 class="text-sm font-semibold text-white">Formatted Submission Message</h4>
+                <p class="text-xs text-neutral-400">Fill your name &amp; copy this caption when sending your photos</p>
+              </div>
+              <button type="button" id="copy-template-btn" class="px-4 py-2 rounded-lg bg-gold text-obsidian font-bold text-xs uppercase tracking-wider hover:brightness-110 transition-all shrink-0">
+                Copy Message
+              </button>
+            </div>
+
+            <div class="mb-3">
+              <label for="participant-name" class="sr-only">Your Name / Handle</label>
+              <input id="participant-name" type="text" placeholder="Enter your Name or Photographer Handle..." class="w-full px-3.5 py-2.5 rounded-lg bg-charcoal border border-white/15 text-sm text-white placeholder-neutral-500 focus:outline-none focus:border-gold transition-colors" />
+            </div>
+
+            <pre id="submission-template" class="w-full p-4 rounded-lg bg-charcoal/90 border border-white/10 text-xs sm:text-sm font-mono text-neutral-200 whitespace-pre-wrap leading-relaxed overflow-x-auto"></pre>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Rules & Offlineways Voting Architecture -->
+  <section id="rules" class="py-20 sm:py-24 px-4 sm:px-6 lg:px-8 border-t border-white/10 bg-charcoal/40">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <span class="text-gold text-xs uppercase tracking-[0.28em] font-semibold">Integrity &amp; Format</span>
+        <h2 class="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-white mt-2">Official Rules &amp; Offline Voting</h2>
+        <p class="text-neutral-400 text-sm sm:text-base mt-3">Simple, transparent guidelines focused purely on artistic vision.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Contest Rules Card -->
+        <div class="gold-card rounded-2xl p-7 sm:p-8">
+          <div class="w-12 h-12 rounded-xl bg-gold/15 border border-gold/40 flex items-center justify-center text-gold mb-6">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </div>
+          <h3 class="font-display text-2xl font-bold text-white mb-4">Participation Guidelines</h3>
+          <ul class="space-y-3.5 text-sm sm:text-base text-neutral-300">
+            <li class="flex items-start gap-3">
+              <span class="text-gold font-bold mt-0.5">01.</span>
+              <span><strong class="text-white">Open to Everyone:</strong> Photographers of any background, device, or skill level may participate.</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-gold font-bold mt-0.5">02.</span>
+              <span><strong class="text-white">Maximum 3 Topics:</strong> Out of the 6 topics (Nature, Astrophotography, Miniatures, Urban, Structures, Random), select a maximum of 3 topics.</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-gold font-bold mt-0.5">03.</span>
+              <span><strong class="text-white">1 Picture Per Chosen Topic:</strong> Submit only 1 photograph per chosen category (up to 3 photographs total per person).</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-gold font-bold mt-0.5">04.</span>
+              <span><strong class="text-white">Original Capture Required:</strong> All submitted photographs must be taken by you.</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-gold font-bold mt-0.5">05.</span>
+              <span><strong class="text-white">Edited Images Allowed (Must Be Tagged):</strong> Post-processed or edited photographs are welcome, provided you explicitly tag/label the entry as <span class="font-mono text-xs px-1.5 py-0.5 rounded bg-gold/15 border border-gold/40 text-gold-light">EDITED</span> when sending it to <span class="text-white font-mono">zenwarrior_ht3</span> or <span class="text-white font-mono">epicmaster__</span>.</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-gold font-bold mt-0.5">06.</span>
+              <span><strong class="text-white">No Monetary or Physical Rewards:</strong> This is a pure passion and recognition showcase—no prizes or cash rewards will be given.</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Voting & Recognition Card -->
+        <div class="gold-card rounded-2xl p-7 sm:p-8 flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-gold/15 border border-gold/40 flex items-center justify-center text-gold mb-6">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
+              </svg>
+            </div>
+            <h3 class="font-display text-2xl font-bold text-white mb-4">Offlineways Voting &amp; Honors</h3>
+            <p class="text-sm sm:text-base text-neutral-300 leading-relaxed mb-5">
+              To eliminate online bot manipulation and public popularity bias, all judging for <strong class="text-white">THE FRAME 2026</strong> is conducted strictly through <span class="text-gold-light font-semibold">Offlineways</span>—dedicated offline voting and external review outside this website.
+            </p>
+            <div class="p-4 rounded-xl bg-obsidian/90 border border-gold/25 space-y-2">
+              <div class="text-xs uppercase tracking-widest text-gold font-semibold">Category Distinction</div>
+              <p class="text-sm text-neutral-300">
+                From each of the 6 categories, <strong class="text-white">1 photograph</strong> will be selected through offline voting and officially announced on <strong class="text-gold-light">1 January 2027</strong> as <span class="underline decoration-gold/60">Best in Category</span>.
+              </p>
+            </div>
+          </div>
+
+          <div class="mt-6 pt-5 border-t border-white/10 flex items-center justify-between text-xs text-neutral-400">
+            <span>6 Categories &times; 1 Winner Each</span>
+            <span class="text-gold font-semibold uppercase tracking-wider">6 Total Honors</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Exhibition Gallery Section -->
+  <section id="gallery" class="py-20 sm:py-28 px-4 sm:px-6 lg:px-8 border-t border-white/10">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center max-w-3xl mx-auto mb-10">
+        <span class="text-gold text-xs uppercase tracking-[0.28em] font-semibold">Curated Exhibition Wall</span>
+        <h2 class="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-white mt-2">Gallery &mdash; Pictures To Be Displayed</h2>
+        <p class="text-neutral-400 text-sm sm:text-base mt-3">
+          Official exhibition frames reserved for <span class="text-white">THE FRAME 2026</span> entries and <span class="text-gold-light">Best in Category</span> selections. Filter by topic below to preview each category's showcase slot.
+        </p>
+      </div>
+
+      <!-- Category Filter Tabs -->
+      <div id="gallery-filters" class="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mb-12">
+        <!-- Populated by JS -->
+      </div>
+
+      <!-- Gallery Grid -->
+      <div id="gallery-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Accordion Section -->
+  <section id="faq" class="py-20 sm:py-24 px-4 sm:px-6 lg:px-8 border-t border-white/10 bg-charcoal/40">
+    <div class="max-w-3xl mx-auto">
+      <div class="text-center mb-12">
+        <span class="text-gold text-xs uppercase tracking-[0.28em] font-semibold">Clarifications</span>
+        <h2 class="font-display text-3xl sm:text-4xl font-bold text-white mt-2">Frequently Asked Questions</h2>
+      </div>
+
+      <div id="faq-list" class="space-y-4">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="border-t border-white/10 bg-obsidian py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+      <div class="text-center md:text-left">
+        <div class="font-display font-bold tracking-[0.22em] text-lg text-white">THE FRAME <span class="text-gold">2026</span></div>
+        <p class="text-xs text-neutral-400 mt-1">23 Nov 2026 &ndash; 24 Dec 2026 &bull; Results Announced 1 Jan 2027</p>
+      </div>
+
+      <div class="flex flex-wrap items-center justify-center gap-4 text-xs text-neutral-400">
+        <span>Submit to: <strong class="text-white font-mono">zenwarrior_ht3</strong> or <strong class="text-white font-mono">epicmaster__</strong></span>
+        <span class="hidden sm:inline">&bull;</span>
+        <span>Voting: <strong class="text-gold-light">Offlineways</strong></span>
+      </div>
+
+      <div class="text-xs text-neutral-500">
+        Pure Photography Showcase &bull; No Commercial Rewards
+      </div>
+    </div>
+  </footer>
+
+  <!-- Lightbox Modal for Inspecting Exhibition Frames -->
+  <div id="frame-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/90 backdrop-blur-md p-4">
+    <div class="relative max-w-2xl w-full rounded-2xl border border-gold/50 bg-charcoal p-6 sm:p-8 shadow-2xl">
+      <button id="close-modal-btn" type="button" aria-label="Close Preview" class="absolute top-4 right-4 p-2 rounded-lg border border-white/15 text-neutral-300 hover:text-gold hover:border-gold">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+
+      <div id="modal-content"></div>
+    </div>
+  </div>
+
+  <!-- Application Logic -->
+  <script>
+    // Contest Categories Data
+    const CATEGORIES = [
+      {
+        id: 'nature',
+        name: 'Nature',
+        code: 'CAT-01',
+        tagline: 'Untamed landscapes, wildlife, flora & natural light',
+        description: 'Capture raw wilderness, dramatic weather, macro botanicals, or candid wildlife moments in their purest natural state.',
+        accent: 'from-emerald-950/50 via-neutral-900 to-obsidian',
+        svgIcon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 20h18L14 6l-4.5 7.5L7 10 3 20z"/><circle cx="17.5" cy="5.5" r="1.5"/></svg>`
+      },
+      {
+        id: 'astrophotography',
+        name: 'Astrophotography',
+        code: 'CAT-02',
+        tagline: 'Deep cosmos, Milky Way arcs, lunar & night skies',
+        description: 'Long-exposure celestial frames, star trails, eclipses, nebulae, or nightscapes where the universe takes center stage.',
+        accent: 'from-indigo-950/60 via-neutral-900 to-obsidian',
+        svgIcon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/><path stroke-linecap="round" d="M17 4v2m-1-1h2"/></svg>`
+      },
+      {
+        id: 'miniatures',
+        name: 'Miniatures',
+        code: 'CAT-03',
+        tagline: 'Small-scale worlds, scale illusions & macro stories',
+        description: 'Toy photography, tiny figurines in vast environments, intricate scale models, or creative forced-perspective scenes.',
+        accent: 'from-amber-950/50 via-neutral-900 to-obsidian',
+        svgIcon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path stroke-linecap="round" d="M20 20l-3.5-3.5M11 8v6M8 11h6"/></svg>`
+      },
+      {
+        id: 'urban',
+        name: 'Urban',
+        code: 'CAT-04',
+        tagline: 'Street life, neon reflections, transit & human rhythm',
+        description: 'The pulse of city streets—candid commuters, rain-slicked alleys, shadows, golden hour crossroads, and metropolitan energy.',
+        accent: 'from-zinc-800/60 via-neutral-900 to-obsidian',
+        svgIcon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 21h18M5 21V7l5-3v17m4 0V10l5-2v13"/></svg>`
+      },
+      {
+        id: 'structures',
+        name: 'Structures',
+        code: 'CAT-05',
+        tagline: 'Geometry, bridges, monuments & architectural lines',
+        description: 'Bold symmetry, brutalist concrete, historic arches, skyscrapers, and engineered forms shaped by light and shadow.',
+        accent: 'from-stone-800/60 via-neutral-900 to-obsidian',
+        svgIcon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 21h18M4 10h16M6 10v11M10 10v11M14 10v11M18 10v11M12 3l9 7H3l9-7z"/></svg>`
+      },
+      {
+        id: 'random',
+        name: 'Random',
+        code: 'CAT-06',
+        tagline: 'Unbound creativity, abstract & unexpected moments',
+        description: 'Anything outside the box—experimental reflections, silhouettes, happy accidents, or spontaneous visual poetry.',
+        accent: 'from-yellow-950/40 via-neutral-900 to-obsidian',
+        svgIcon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.2" fill="currentColor"/><circle cx="15.5" cy="8.5" r="1.2" fill="currentColor"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/><circle cx="8.5" cy="15.5" r="1.2" fill="currentColor"/><circle cx="15.5" cy="15.5" r="1.2" fill="currentColor"/></svg>`
+      }
+    ];
+
+    // FAQ Data
+    const FAQS = [
+      {
+        q: 'Who can participate in THE FRAME 2026?',
+        a: 'Anyone from anywhere in the world can participate. Whether you shoot on a smartphone, DSLR, mirrorless, or film camera, your vision is welcome.'
+      },
+      {
+        q: 'Are edited or post-processed photographs allowed?',
+        a: 'Yes! Edited images are allowed to be sent, provided they are clearly tagged as "EDITED" when you submit them to zenwarrior_ht3 or epicmaster__. You can use the Entry Planner above to automatically attach the [EDITED] tag to your submission message.'
+      },
+      {
+        q: 'How many topics and photos am I allowed to send?',
+        a: 'There are 6 total topics: Nature, Astrophotography, Miniatures, Urban, Structures, and Random. You may choose a maximum of 3 topics, and submit strictly 1 photograph per chosen topic (maximum 3 photographs in total).'
+      },
+      {
+        q: 'Where and when do I submit my photographs?',
+        a: 'Submissions are open from 23 November 2026 until 24 December 2026. Send your selected photographs directly to our ID: zenwarrior_ht3 or epicmaster__.'
+      },
+      {
+        q: 'Are there any cash prizes or physical rewards?',
+        a: 'No. No monetary or physical rewards will be given. THE FRAME 2026 is built purely for artistic passion, community exhibition, and earning the official title of Best in Category.'
+      },
+      {
+        q: 'How are the winning photographs chosen?',
+        a: 'One winning picture from each of the 6 categories will be selected through Offlineways (offline voting conducted outside this website) and officially announced on 1 January 2027.'
+      }
+    ];
+
+    // State
+    let selectedCategoryIds = [];
+    let categoryEditStatus = {}; // { [categoryId]: boolean } -> true = EDITED, false = ORIGINAL
+    let activeGalleryFilter = 'all';
+
+    // DOM References
+    const categoriesGrid = document.getElementById('categories-grid');
+    const selectedCountEl = document.getElementById('selected-count');
+    const photoCountEl = document.getElementById('photo-count');
+    const plannerChecklistEl = document.getElementById('planner-checklist');
+    const submissionTemplateEl = document.getElementById('submission-template');
+    const participantNameInput = document.getElementById('participant-name');
+    const galleryFiltersEl = document.getElementById('gallery-filters');
+    const galleryGridEl = document.getElementById('gallery-grid');
+    const faqListEl = document.getElementById('faq-list');
+
+    // Toast Notification Helper (Never uses alert())
+    function showToast(message, type = 'gold') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      const borderClass = type === 'warning' ? 'border-amber-400 text-amber-200' : 'border-gold text-gold-light';
+      toast.className = `pointer-events-auto rounded-xl bg-charcoal/95 backdrop-blur-md border ${borderClass} px-4 py-3 shadow-2xl text-xs sm:text-sm font-medium flex items-center justify-between gap-3 transition-all duration-300 transform translate-y-2 opacity-0`;
+      toast.innerHTML = `
+        <span>${message}</span>
+        <span class="w-2 h-2 rounded-full bg-gold shrink-0"></span>
+      `;
+      container.appendChild(toast);
+
+      requestAnimationFrame(() => {
+        toast.classList.remove('translate-y-2', 'opacity-0');
+      });
+
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-2');
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
+    // Reliable Clipboard Copy Helper (Uses execCommand fallback for iframe compatibility)
+    function copyText(text, successMsg = 'Copied to clipboard!') {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.focus();
+      textarea.select();
+      try {
+        document.execCommand('copy');
+        showToast(successMsg);
+      } catch (err) {
+        showToast('Unable to copy automatically. Please copy manually.', 'warning');
+      }
+      document.body.removeChild(textarea);
+    }
+
+    // Render Interactive Categories
+    function renderCategories() {
+      categoriesGrid.innerHTML = CATEGORIES.map(cat => {
+        const isSelected = selectedCategoryIds.includes(cat.id);
+        const isMaxReached = !isSelected && selectedCategoryIds.length >= 3;
+
+        return `
+          <div
+            onclick="toggleCategory('${cat.id}')"
+            role="button"
+            tabindex="0"
+            onkeydown="if(event.key==='Enter'||event.key===' ') toggleCategory('${cat.id}')"
+            aria-pressed="${isSelected}"
+            class="gold-card rounded-2xl p-6 cursor-pointer select-none flex flex-col justify-between relative ${isSelected ? 'selected' : ''} ${isMaxReached ? 'opacity-65' : ''}"
+          >
+            <div>
+              <div class="flex items-center justify-between mb-5">
+                <div class="w-11 h-11 rounded-xl ${isSelected ? 'bg-gold text-obsidian' : 'bg-white/5 text-gold border border-gold/30'} flex items-center justify-center transition-colors">
+                  ${cat.svgIcon}
+                </div>
+                <span class="text-xs font-mono tracking-widest px-2.5 py-1 rounded-md ${isSelected ? 'bg-gold text-obsidian font-bold' : 'bg-white/5 text-neutral-400'}">
+                  ${isSelected ? 'SELECTED (1 PHOTO)' : cat.code}
+                </span>
+              </div>
+
+              <h3 class="font-display text-xl sm:text-2xl font-bold text-white mb-1.5">${cat.name}</h3>
+              <p class="text-xs text-gold-light/90 font-medium mb-3">${cat.tagline}</p>
+              <p class="text-sm text-neutral-400 leading-relaxed">${cat.description}</p>
+            </div>
+
+            <div class="mt-6 pt-4 border-t border-white/10 flex items-center justify-between text-xs">
+              <span class="${isSelected ? 'text-gold-light font-semibold' : 'text-neutral-400'}">
+                ${isSelected ? 'Included in your entry plan' : (isMaxReached ? 'Max 3 categories reached' : 'Click to select topic')}
+              </span>
+              <span class="w-5 h-5 rounded-full border ${isSelected ? 'border-gold bg-gold text-obsidian' : 'border-white/25'} flex items-center justify-center text-[11px] font-bold">
+                ${isSelected ? '✓' : '+'}
+              </span>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      updatePlannerUI();
+    }
+
+    // Toggle Category Selection (Enforces Max 3)
+    function toggleCategory(id) {
+      const idx = selectedCategoryIds.indexOf(id);
+      if (idx > -1) {
+        selectedCategoryIds.splice(idx, 1);
+        delete categoryEditStatus[id];
+      } else {
+        if (selectedCategoryIds.length >= 3) {
+          showToast('Maximum 3 categories allowed per participant.', 'warning');
+          return;
+        }
+        selectedCategoryIds.push(id);
+        categoryEditStatus[id] = false; // Default to ORIGINAL
+      }
+      renderCategories();
+    }
+
+    // Toggle Edited vs Original Tag for a Selected Category
+    function setCategoryEdited(id, isEdited) {
+      categoryEditStatus[id] = Boolean(isEdited);
+      updatePlannerUI();
+    }
+
+    // Update Checklist & Copyable Message Template
+    function updatePlannerUI() {
+      const count = selectedCategoryIds.length;
+      selectedCountEl.textContent = count;
+      photoCountEl.textContent = count;
+
+      const selectedObjects = CATEGORIES.filter(c => selectedCategoryIds.includes(c.id));
+
+      if (selectedObjects.length === 0) {
+        plannerChecklistEl.innerHTML = `<li class="text-neutral-500 italic">Select up to 3 categories above to generate your photo checklist...</li>`;
+      } else {
+        plannerChecklistEl.innerHTML = selectedObjects.map((cat, i) => {
+          const isEdited = !!categoryEditStatus[cat.id];
+          return `
+            <li class="flex flex-wrap items-center justify-between gap-2 py-2 border-b border-white/5 last:border-0">
+              <span class="flex items-center gap-2">
+                <span class="w-5 h-5 rounded bg-gold/20 text-gold text-xs font-bold flex items-center justify-center">${i + 1}</span>
+                <span class="text-white font-medium">${cat.name}</span>
+              </span>
+              <div class="inline-flex rounded-lg bg-charcoal p-0.5 border border-white/15 text-[11px] font-mono">
+                <button
+                  type="button"
+                  onclick="setCategoryEdited('${cat.id}', false)"
+                  class="px-2.5 py-1 rounded-md transition-colors ${!isEdited ? 'bg-white text-obsidian font-bold' : 'text-neutral-400 hover:text-white'}"
+                >
+                  ORIGINAL
+                </button>
+                <button
+                  type="button"
+                  onclick="setCategoryEdited('${cat.id}', true)"
+                  class="px-2.5 py-1 rounded-md transition-colors ${isEdited ? 'bg-gold text-obsidian font-bold' : 'text-neutral-400 hover:text-gold-light'}"
+                >
+                  EDITED
+                </button>
+              </div>
+            </li>
+          `;
+        }).join('');
+      }
+
+      const nameVal = participantNameInput.value.trim() || '[Your Name / Handle]';
+      const topicsBlock = selectedObjects.length > 0
+        ? selectedObjects.map((c, idx) => {
+            const tag = categoryEditStatus[c.id] ? '[EDITED]' : '[ORIGINAL]';
+            return `${idx + 1}. ${c.name} — ${tag} (1 Photo)`;
+          }).join('\n')
+        : '1. [Topic 1] — [ORIGINAL or EDITED] (1 Photo)\n2. [Topic 2 (Optional)] — [ORIGINAL or EDITED] (1 Photo)\n3. [Topic 3 (Optional)] — [ORIGINAL or EDITED] (1 Photo)';
+
+      submissionTemplateEl.textContent =
+`THE FRAME 2026 — OFFICIAL ENTRY
+Participant: ${nameVal}
+Chosen Topics (${selectedObjects.length}/3):
+${topicsBlock}
+
+Note: All edited entries are explicitly tagged as [EDITED].`;
+    }
+
+    // Render Exhibition Gallery ("Pictures to be displayed")
+    function renderGallery() {
+      const filters = [{ id: 'all', name: 'All 6 Frames' }, ...CATEGORIES.map(c => ({ id: c.id, name: c.name }))];
+
+      galleryFiltersEl.innerHTML = filters.map(f => {
+        const active = activeGalleryFilter === f.id;
+        return `
+          <button
+            type="button"
+            onclick="setGalleryFilter('${f.id}')"
+            class="px-4 py-2 rounded-full text-xs sm:text-sm font-medium transition-all ${
+              active
+                ? 'bg-gold text-obsidian font-bold shadow-lg shadow-gold/20'
+                : 'bg-charcoal border border-white/15 text-neutral-300 hover:border-gold/50 hover:text-gold'
+            }"
+          >
+            ${f.name}
+          </button>
+        `;
+      }).join('');
+
+      const items = activeGalleryFilter === 'all'
+        ? CATEGORIES
+        : CATEGORIES.filter(c => c.id === activeGalleryFilter);
+
+      galleryGridEl.innerHTML = items.map(cat => `
+        <article
+          onclick="openFrameModal('${cat.id}')"
+          class="group cursor-pointer rounded-2xl border border-white/15 bg-charcoal overflow-hidden hover:border-gold/60 transition-all duration-300 shadow-xl"
+        >
+          <!-- Editorial Exhibition Frame Placeholder -->
+          <div class="relative aspect-[4/3] bg-gradient-to-br ${cat.accent} p-6 flex flex-col items-center justify-center text-center overflow-hidden">
+            <!-- Viewfinder Reticle Corners -->
+            <span class="viewfinder-corner top-4 left-4 border-t-2 border-l-2"></span>
+            <span class="viewfinder-corner top-4 right-4 border-t-2 border-r-2"></span>
+            <span class="viewfinder-corner bottom-4 left-4 border-b-2 border-l-2"></span>
+            <span class="viewfinder-corner bottom-4 right-4 border-b-2 border-r-2"></span>
+
+            <!-- Subtle Grid Lines -->
+            <div class="absolute inset-0 opacity-10 bg-[linear-gradient(to_right,#ffffff12_1px,transparent_1px),linear-gradient(to_bottom,#ffffff12_1px,transparent_1px)] bg-[size:28px_28px]"></div>
+
+            <!-- Tag Indicator Badge -->
+            <div class="absolute top-3.5 right-6 z-10 flex items-center gap-1.5 text-[10px] font-mono uppercase tracking-wider">
+              <span class="px-2 py-0.5 rounded bg-obsidian/80 border border-white/15 text-neutral-300">[ORIGINAL]</span>
+              <span class="px-2 py-0.5 rounded bg-obsidian/80 border border-gold/40 text-gold-light">[EDITED]</span>
+            </div>
+
+            <div class="relative z-10 flex flex-col items-center mt-2">
+              <div class="w-12 h-12 rounded-full border border-gold/40 bg-obsidian/70 flex items-center justify-center text-gold mb-3 group-hover:scale-110 transition-transform">
+                ${cat.svgIcon}
+              </div>
+              <span class="text-[11px] font-mono uppercase tracking-[0.28em] text-gold-light mb-1">${cat.code} &bull; EXHIBITION SLOT</span>
+              <h4 class="font-display text-lg sm:text-xl font-bold text-white tracking-wide">Pictures to be displayed</h4>
+              <p class="text-xs text-neutral-400 mt-1.5 max-w-[230px]">
+                Reserved for <span class="text-white">${cat.name}</span> entries &amp; Best in Category reveal (1 Jan 2027)
+              </p>
+            </div>
+          </div>
+
+          <!-- Frame Caption Bar -->
+          <div class="p-5 bg-obsidian border-t border-white/10 flex items-center justify-between">
+            <div>
+              <div class="text-xs uppercase tracking-widest text-gold font-semibold">${cat.name}</div>
+              <div class="text-xs text-neutral-400 mt-0.5">1 Best Picture Selected via Offlineways</div>
+            </div>
+            <span class="text-xs text-neutral-300 group-hover:text-gold transition-colors font-medium">Inspect Frame &rarr;</span>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    function setGalleryFilter(id) {
+      activeGalleryFilter = id;
+      renderGallery();
+    }
+
+    // Lightbox Frame Modal
+    function openFrameModal(categoryId) {
+      const cat = CATEGORIES.find(c => c.id === categoryId);
+      if (!cat) return;
+
+      const modal = document.getElementById('frame-modal');
+      const content = document.getElementById('modal-content');
+
+      content.innerHTML = `
+        <div class="space-y-5">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gold/15 border border-gold/40 text-gold text-xs font-mono uppercase tracking-widest">
+            ${cat.code} &bull; ${cat.name} Division
+          </div>
+          <h3 class="font-display text-2xl sm:text-3xl font-bold text-white">Pictures to be displayed</h3>
+          <div class="aspect-video rounded-xl border border-gold/30 bg-gradient-to-br ${cat.accent} flex flex-col items-center justify-center p-6 text-center">
+            <div class="text-gold mb-3">${cat.svgIcon}</div>
+            <p class="font-display text-lg text-white tracking-wider uppercase">Official ${cat.name} Gallery Frame</p>
+            <p class="text-xs sm:text-sm text-neutral-300 mt-2 max-w-md">
+              Submitted photographs for <strong class="text-white">${cat.name}</strong> will be curated here, culminating in the <strong class="text-gold-light">Best in Category</strong> announcement on <strong class="text-white">1 January 2027</strong>.
+            </p>
+          </div>
+          <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2">
+            <p class="text-xs text-neutral-400">Theme focus: ${cat.tagline}</p>
+            <button type="button" onclick="selectFromModal('${cat.id}')" class="w-full sm:w-auto px-5 py-2.5 rounded-lg bg-gold text-obsidian font-bold text-xs uppercase tracking-wider hover:brightness-110">
+              Add ${cat.name} to My Entry Plan
+            </button>
+          </div>
+        </div>
+      `;
+
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function selectFromModal(id) {
+      if (!selectedCategoryIds.includes(id)) {
+        toggleCategory(id);
+      }
+      closeFrameModal();
+      document.getElementById('categories').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function closeFrameModal() {
+      const modal = document.getElementById('frame-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    // Render FAQ Accordion
+    function renderFAQs() {
+      faqListEl.innerHTML = FAQS.map((item, idx) => `
+        <div class="rounded-xl border border-white/15 bg-obsidian/90 overflow-hidden">
+          <button
+            type="button"
+            onclick="toggleFAQ(${idx})"
+            class="w-full px-6 py-4 text-left flex items-center justify-between gap-4 hover:bg-white/[0.02] transition-colors"
+          >
+            <span class="font-medium text-sm sm:text-base text-white">${item.q}</span>
+            <span id="faq-icon-${idx}" class="text-gold font-mono text-xl leading-none transition-transform duration-300">+</span>
+          </button>
+          <div id="faq-body-${idx}" class="accordion-content px-6 text-sm text-neutral-300 leading-relaxed">
+            <div class="pb-5 pt-1 border-t border-white/10">${item.a}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function toggleFAQ(index) {
+      const body = document.getElementById(`faq-body-${index}`);
+      const icon = document.getElementById(`faq-icon-${index}`);
+      const isOpen = body.style.maxHeight && body.style.maxHeight !== '0px';
+
+      // Close all others
+      FAQS.forEach((_, i) => {
+        document.getElementById(`faq-body-${i}`).style.maxHeight = '0px';
+        document.getElementById(`faq-icon-${i}`).style.transform = 'rotate(0deg)';
+      });
+
+      if (!isOpen) {
+        body.style.maxHeight = body.scrollHeight + 24 + 'px';
+        icon.style.transform = 'rotate(45deg)';
+      }
+    }
+
+    // Dynamic Live Countdown Timer
+    function updateCountdown() {
+      const now = new Date();
+      // Contest key dates (local midnight transitions)
+      const openDate = new Date('2026-11-23T00:00:00');
+      const deadlineDate = new Date('2026-12-24T23:59:59');
+      const resultsDate = new Date('2027-01-01T00:00:00');
+
+      const labelEl = document.getElementById('countdown-label');
+      let targetDate = openDate;
+
+      if (now < openDate) {
+        labelEl.textContent = 'Contest Opens In (23 Nov 2026)';
+        targetDate = openDate;
+      } else if (now <= deadlineDate) {
+        labelEl.textContent = 'Submissions Open — Closes In (24 Dec 2026)';
+        targetDate = deadlineDate;
+      } else if (now < resultsDate) {
+        labelEl.textContent = 'Offlineways Voting — Results Announced In (1 Jan 2027)';
+        targetDate = resultsDate;
+      } else {
+        labelEl.textContent = 'THE FRAME 2026 — Winners Announced!';
+        document.getElementById('cd-days').textContent = '00';
+        document.getElementById('cd-hours').textContent = '00';
+        document.getElementById('cd-minutes').textContent = '00';
+        document.getElementById('cd-seconds').textContent = '00';
+        return;
+      }
+
+      const diff = Math.max(0, targetDate - now);
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((diff / (1000 * 60)) % 60);
+      const seconds = Math.floor((diff / 1000) % 60);
+
+      document.getElementById('cd-days').textContent = String(days).padStart(2, '0');
+      document.getElementById('cd-hours').textContent = String(hours).padStart(2, '0');
+      document.getElementById('cd-minutes').textContent = String(minutes).padStart(2, '0');
+      document.getElementById('cd-seconds').textContent = String(seconds).padStart(2, '0');
+    }
+
+    // Event Listeners
+    document.getElementById('reset-selection-btn').addEventListener('click', () => {
+      selectedCategoryIds = [];
+      categoryEditStatus = {};
+      renderCategories();
+      showToast('Category selection cleared.');
+    });
+
+    participantNameInput.addEventListener('input', updatePlannerUI);
+
+    document.getElementById('copy-template-btn').addEventListener('click', () => {
+      copyText(submissionTemplateEl.textContent, 'Formatted entry message copied!');
+    });
+
+    document.getElementById('close-modal-btn').addEventListener('click', closeFrameModal);
+    document.getElementById('frame-modal').addEventListener('click', (e) => {
+      if (e.target.id === 'frame-modal') closeFrameModal();
+    });
+
+    // Mobile Menu Toggle
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const iconOpen = document.getElementById('menu-icon-open');
+    const iconClose = document.getElementById('menu-icon-close');
+
+    mobileMenuBtn.addEventListener('click', () => {
+      const isHidden = mobileMenu.classList.contains('hidden');
+      mobileMenu.classList.toggle('hidden');
+      iconOpen.classList.toggle('hidden', !isHidden);
+      iconClose.classList.toggle('hidden', isHidden);
+    });
+
+    document.querySelectorAll('.mobile-nav-link').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.add('hidden');
+        iconOpen.classList.remove('hidden');
+        iconClose.classList.add('hidden');
+      });
+    });
+
+    // Initialize Application
+    window.addEventListener('DOMContentLoaded', () => {
+      renderCategories();
+      renderGallery();
+      renderFAQs();
+      updateCountdown();
+      setInterval(updateCountdown, 1000);
+    });
+  </script>
+</body>
+</html>
